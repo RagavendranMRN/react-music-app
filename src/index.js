@@ -1,8 +1,10 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+
+import '../src/style.css';
+
 import { Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../src/style.css';
 import 'tachyons';
 
 const musicList = [
@@ -15,7 +17,7 @@ const musicList = [
   {
     id: 2,
     songName: 'Green Lights',
-    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
     albumCover: 'https://picsum.photos/200?random=2'
   }
 ];
@@ -30,8 +32,34 @@ export class MusicAlbum extends Component {
   constructor() {
     super();
     this.state = {
-      count: 0
+      count: 0,
+      leftNavDisable: true,
+      RightNavDisable: false
     };
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevState.count !== this.state.count) {
+      if (this.state.count == 0) {
+        this.setState({
+          leftNavDisable: true,
+          RightNavDisable: false
+        });
+        console.log('c1');
+      } else if (this.state.count <= musicList.length) {
+        this.setState({
+          leftNavDisable: false,
+          RightNavDisable: true
+        });
+        console.log('c2');
+      } else {
+        this.setState({
+          leftNavDisable: false,
+          RightNavDisable: false
+        });
+        console.log('c3');
+      }
+    }
   }
 
   playAudio() {
@@ -58,13 +86,14 @@ export class MusicAlbum extends Component {
   }
 
   render() {
-    const { count } = this.state;
+    const { count, leftNavDisable, RightNavDisable } = this.state;
     console.log(count);
-    console.log(musicList);
+    console.log(musicList[count].url);
     return (
       <div className="tc">
         <div className="ImagePlaceholder">
           <Button
+            disabled={leftNavDisable}
             className="buttonpack"
             variant="light"
             className="leftAngle"
@@ -74,6 +103,7 @@ export class MusicAlbum extends Component {
           </Button>
           <img src={musicList[count].albumCover} className="albumCover" />
           <Button
+            disabled={RightNavDisable}
             className="buttonpack"
             variant="light"
             className="rightAngle"
