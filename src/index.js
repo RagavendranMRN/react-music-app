@@ -17,8 +17,14 @@ const musicList = [
   {
     id: 2,
     songName: 'Green Lights',
-    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
     albumCover: 'https://picsum.photos/200?random=2'
+  },
+  {
+    id: 3,
+    songName: 'New change',
+    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+    albumCover: 'https://picsum.photos/200?random=3'
   }
 ];
 
@@ -45,33 +51,18 @@ export class MusicAlbum extends Component {
           leftNavDisable: true,
           RightNavDisable: false
         });
-        console.log('c1');
-      } else if (this.state.count <= musicList.length) {
+      } else if (this.state.count == musicList.length - 1) {
         this.setState({
           leftNavDisable: false,
           RightNavDisable: true
         });
-        console.log('c2');
       } else {
         this.setState({
           leftNavDisable: false,
           RightNavDisable: false
         });
-        console.log('c3');
       }
     }
-  }
-
-  playAudio() {
-    const audioEl = document.getElementsByClassName('audio-element')[0];
-    console.log('Playing');
-    audioEl.play();
-  }
-
-  stopAudio() {
-    const audioEl = document.getElementsByClassName('audio-element')[0];
-    audioEl.pause();
-    audioEl.currentTime = 0;
   }
 
   playNext() {
@@ -87,8 +78,6 @@ export class MusicAlbum extends Component {
 
   render() {
     const { count, leftNavDisable, RightNavDisable } = this.state;
-    console.log(count);
-    console.log(musicList[count].url);
     return (
       <div className="tc">
         <div className="ImagePlaceholder">
@@ -99,7 +88,7 @@ export class MusicAlbum extends Component {
             className="leftAngle"
             onClick={this.playPrevious.bind(this)}
           >
-            <i class="fa fa-angle-left" />
+            <i className="fa fa-angle-left" />
           </Button>
           <img src={musicList[count].albumCover} className="albumCover" />
           <Button
@@ -109,14 +98,15 @@ export class MusicAlbum extends Component {
             className="rightAngle"
             onClick={this.playNext.bind(this)}
           >
-            <i class="fa fa-angle-right" />
+            <i className="fa fa-angle-right" />
           </Button>
         </div>
         <div>
           <h1>{musicList[count].songName}</h1>
-          <audio className="audio-element" controls>
+          {/* <audio className="audio-element" controls>
             <source src={musicList[count].url} />
-          </audio>
+          </audio> */}
+          <MusicPlayer url={musicList[count].url} />
         </div>
 
         {/* <div className="buttonpack tc">
@@ -152,6 +142,10 @@ export class MusicAlbum extends Component {
       </div>
     );
   }
+}
+
+export function MusicPlayer({ url }) {
+  return <audio className="audio-element" controls src={url} />;
 }
 
 ReactDOM.render(<App />, document.getElementById('root'));
